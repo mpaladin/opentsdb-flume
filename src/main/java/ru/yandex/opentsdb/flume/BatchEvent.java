@@ -2,14 +2,11 @@ package ru.yandex.opentsdb.flume;
 
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.apache.flume.Event;
-import org.xerial.snappy.SnappyCodec;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Collections;

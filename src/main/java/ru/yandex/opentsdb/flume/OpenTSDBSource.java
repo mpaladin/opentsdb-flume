@@ -54,6 +54,7 @@ public class OpenTSDBSource extends AbstractLineEventSource {
       if (line == null) {
         return;
       }
+        logger.debug("line:<" + new String(line.getBody()) + ">");
       if (isEvent(line)) {
         try {
           queue.offer(line.getBody());

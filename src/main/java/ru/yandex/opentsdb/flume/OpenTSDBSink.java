@@ -241,6 +241,7 @@ public class OpenTSDBSink extends AbstractSink implements Configurable {
    * @return constructed EventData
    */
   private EventData parseEvent(final byte[] body) {
+    logger.debug("parseEvent(" + new String(body) + ")");
     final int idx = eventBodyStart(body);
     if (idx == -1) {
       logger.error("empty event");
@@ -355,8 +356,10 @@ public class OpenTSDBSink extends AbstractSink implements Configurable {
               throw Throwables.propagate(state.failure);
 
             try {
+              logger.debug("batchevent body received: " + new String(event.getBody()));
               BatchEvent be = new BatchEvent(event.getBody());
               for (byte[] body : be) {
+                logger.debug("single batchevent body received: " + new String(event.getBody()));
                 final EventData eventData = parseEvent(body);
                 if (eventData == null)
                   continue;
@@ -364,6 +367,7 @@ public class OpenTSDBSink extends AbstractSink implements Configurable {
                 datas.add(eventData);
               }
             } catch (Exception e) {
+              logger.warn("exception getting batch event: " + e);
               continue;
             }
           }
@@ -445,13 +449,15 @@ public class OpenTSDBSink extends AbstractSink implements Configurable {
 
   @Override
   public synchronized void start() {
-    logger.info(String.format("Starting: %s:%s series:%s uids:%s batchSize:%d",
+    logger.info(String.format("Starting OpenTSDBSink: %s:%s series:%s uids:%s batchSize:%d",
             zkquorum, zkpath, seriesTable, uidsTable, batchSize));
     hbaseClient = new HBaseClient(zkquorum, zkpath);
     tsdb = new TSDB(hbaseClient, seriesTable, uidsTable);
     channelCounter.start();
     sinkCounter.start();
     super.start();
+    logger.info(String.format("Started OpenTSDBSink: %s:%s series:%s uids:%s batchSize:%d",
+            zkquorum, zkpath, seriesTable, uidsTable, batchSize));
   }
 
   @Override

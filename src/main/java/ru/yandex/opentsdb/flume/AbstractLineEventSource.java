@@ -58,6 +58,7 @@ public class AbstractLineEventSource
           getChannelProcessor().processEvent(batchEvent);
           list.clear();
         } catch (ChannelException fce) {
+          logger.debug("channel exception: " + fce);
           if (force) {
             logger.error("Forced to flush, but we've lost " + list.size() +
                     " events, channel don't accepts data:" + fce.getMessage());
